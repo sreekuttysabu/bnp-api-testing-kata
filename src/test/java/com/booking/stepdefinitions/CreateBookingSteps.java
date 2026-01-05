@@ -138,7 +138,14 @@ import com.booking.utils.ConfigReader;
 	        response.then().log().ifValidationFails();
 	    }
 
+	    @Given("a booking payload without last name")
+	    public void a_booking_payload_without_last_name() {
 
+	        booking_Payload = BookingPayloadUtil.createBookingPayload(
+	                true,
+	                "12345678901"
+	        ).replace("\"lastname\": \"Sreekutty\",", "");
+	    }
 	    
 	}
 	
