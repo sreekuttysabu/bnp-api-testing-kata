@@ -19,3 +19,9 @@ Feature: Booking API
   When I create a booking
   Then the response status code should be 201
   And provide a unique booking identifier in the response
+  
+  Scenario: Update booking firstname successfully
+  Given an existing booking
+  And I am authenticated
+  When I update the booking firstname
+  Then the response status code should be 200

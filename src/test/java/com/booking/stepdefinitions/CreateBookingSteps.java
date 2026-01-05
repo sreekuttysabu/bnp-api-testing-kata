@@ -16,6 +16,8 @@ import com.booking.utils.BookingPayloadUtil;
 
 	    private Response response;
 	    private String booking_Payload;
+	    private int bookingId;
+	    private String authToken;
 
 	    @Given("a complete and valid set of booking details")
 	    public void a_complete_and_valid_set_of_booking_details() {
@@ -72,16 +74,63 @@ import com.booking.utils.BookingPayloadUtil;
 	    @Given("a valid booking payload without deposit")
 	    public void a_valid_booking_payload_without_deposit() {
 
-	        String check_in = java.time.LocalDate.now().plusDays(20).toString();
-	        String check_out = java.time.LocalDate.now().plusDays(23).toString();
-
-	        int roomId = new java.util.Random().nextInt(100) + 1;
-
 	        booking_Payload = BookingPayloadUtil.createBookingPayload(
 	                false,
 	                "12345678901"
 	        );
 	    }
+	    @Given("I am authenticated")
+	    public void i_am_authenticated() {
+
+	        String authPayload = """
+	            {
+	              "username": "admin",
+	              "password": "password"
+	            }
+	            """;
+
+	        Response authResponse = given()
+	                .contentType("application/json")
+	                .body(authPayload)
+	                .post("https://automationintesting.online/api/auth/login");
+
+	        authToken = authResponse.jsonPath().getString("token");
+	        assertNotNull("Auth token should be generated", authToken);
+	    }
+	    
+	    @Given("an existing booking")
+	    public void an_existing_booking() {
+	        booking_Payload = BookingPayloadUtil.createBookingPayload(
+	                true,
+	                "12345678901"
+	        );
+
+	        response = given()
+	                .contentType("application/json")
+	                .body(booking_Payload)
+	                .post("https://automationintesting.online/api/booking");
+
+	        bookingId = response.jsonPath().getInt("bookingid");
+	        assertTrue(bookingId > 0);
+	    }
+	    
+	    @When("I update the booking firstname")
+	    public void i_update_the_booking_firstname() {
+
+	        String updatePayload = BookingPayloadUtil.createBookingPayload(
+	                true,
+	                "12345678901"
+	        ).replace("\"firstname\": \"Hazel\"", "\"firstname\": \"UpdatedHazel\"");
+
+	        response = given()
+	                .contentType("application/json")
+	                .cookie("token", authToken)
+	                .body(updatePayload)
+	                .put("https://automationintesting.online/api/booking/" + bookingId);
+
+	        response.then().log().ifValidationFails();
+	    }
+
 
 	    
 	}
