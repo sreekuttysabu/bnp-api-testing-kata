@@ -15,8 +15,10 @@ package com.booking.stepdefinitions;
 
 	    @Given("a complete and valid set of booking details")
 	    public void a_complete_and_valid_set_of_booking_details() {
-	    	String check_in = java.time.LocalDate.now().plusDays(10).toString();
-	        String check_out = java.time.LocalDate.now().plusDays(13).toString();
+	    	
+	   // setting up dynamic dates
+	    	String check_in = java.time.LocalDate.now().plusDays(14).toString();
+	        String check_out = java.time.LocalDate.now().plusDays(16).toString();
 
 	       
 	        int roomId = (int) (System.currentTimeMillis() % 5) + 1; // room ids 1–5
@@ -38,6 +40,7 @@ package com.booking.stepdefinitions;
 	    }
 
 	    @When("I submit the request to create a new booking")
+	    @When("I create a booking")
 	    public void i_submit_the_request_to_create_a_new_booking() {
 	    	response = given()
 	                .header("Content-Type", "application/json")
@@ -45,7 +48,8 @@ package com.booking.stepdefinitions;
 	                .body(booking_Payload)
 	                .when()
 	                .post("https://automationintesting.online/api/booking");
-	    	response.then().log().all();
+	    	
+	    	response.then().log().ifValidationFails();
 	    }
 
 	    @Then("the response status code should be {int}")
@@ -60,6 +64,41 @@ package com.booking.stepdefinitions;
 	                response.jsonPath().get("bookingid")
 	        );
 	    }
+	    @Given("a booking payload with invalid phone number")
+	    public void a_booking_payload_with_invalid_phone_number() {
+
+	        String check_in = java.time.LocalDate.now().plusDays(15).toString();
+	        String check_out = java.time.LocalDate.now().plusDays(18).toString();
+
+	        int roomId = (int) (System.currentTimeMillis() % 5) + 1;
+
+	        booking_Payload = """
+	            {
+	              "roomid": %d,
+	              "firstname": "Hazel",
+	              "lastname": "Sreekutty",
+	              "depositpaid": true,
+	              "bookingdates": {
+	                "checkin": "%s",
+	                "checkout": "%s"
+	              },
+	              "email": "hazel.sreekutty@example.com",
+	              "phone": "123"
+	            }
+	            """.formatted(roomId, check_in, check_out);
+	    }
+
+
+	    @Then("an error message should be returned")
+	    public void an_error_message_should_be_returned() {
+	        assertTrue(
+	            "Expected response body for validation error",
+	            response.getBody() != null && response.getBody().asString().length() > 0
+	        );
+	    }
+   
+	    
+	    
 	}
 	
 	
