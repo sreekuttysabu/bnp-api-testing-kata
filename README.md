@@ -65,3 +65,4 @@ This kata has the purpose to evaluate both your technical skills as well as your
 * Quality of the codebase (design patterns, structure, code quality, …)
 * Use of Rest-Assured and Cucumber features
 * Commit history and progress demonstration
+#Initial setup verified in Eclipse.
