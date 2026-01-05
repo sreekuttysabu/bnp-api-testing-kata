@@ -8,6 +8,10 @@ package com.booking.stepdefinitions;
 	import static io.restassured.RestAssured.*;
 	import static org.junit.Assert.*;
 
+import java.util.Random;
+
+import com.booking.utils.BookingPayloadUtil;
+
 	public class CreateBookingSteps {
 
 	    private Response response;
@@ -16,27 +20,10 @@ package com.booking.stepdefinitions;
 	    @Given("a complete and valid set of booking details")
 	    public void a_complete_and_valid_set_of_booking_details() {
 	    	
-	   // setting up dynamic dates
-	    	String check_in = java.time.LocalDate.now().plusDays(14).toString();
-	        String check_out = java.time.LocalDate.now().plusDays(16).toString();
-
-	       
-	        int roomId = (int) (System.currentTimeMillis() % 5) + 1; // room ids 1–5
-
-	        booking_Payload = """
-	            {
-	              "roomid": %d,
-	              "firstname": "Hazel",
-	              "lastname": "Sreekutty",
-	              "depositpaid": true,
-	              "bookingdates": {
-	                "checkin": "%s",
-	                "checkout": "%s"
-	              },
-	              "email": "hazel.sreekutty@example.com",
-	              "phone": "12345678901"
-	            }
-	            """.formatted(roomId, check_in, check_out);
+	    	booking_Payload = BookingPayloadUtil.createBookingPayload(
+	                true,
+	                "12345678901"
+	        );
 	    }
 
 	    @When("I submit the request to create a new booking")
@@ -67,25 +54,10 @@ package com.booking.stepdefinitions;
 	    @Given("a booking payload with invalid phone number")
 	    public void a_booking_payload_with_invalid_phone_number() {
 
-	        String check_in = java.time.LocalDate.now().plusDays(15).toString();
-	        String check_out = java.time.LocalDate.now().plusDays(18).toString();
-
-	        int roomId = (int) (System.currentTimeMillis() % 5) + 1;
-
-	        booking_Payload = """
-	            {
-	              "roomid": %d,
-	              "firstname": "Hazel",
-	              "lastname": "Sreekutty",
-	              "depositpaid": true,
-	              "bookingdates": {
-	                "checkin": "%s",
-	                "checkout": "%s"
-	              },
-	              "email": "hazel.sreekutty@example.com",
-	              "phone": "123"
-	            }
-	            """.formatted(roomId, check_in, check_out);
+	    	booking_Payload = BookingPayloadUtil.createBookingPayload(
+	                true,
+	                "123"
+	        );
 	    }
 
 
@@ -97,7 +69,20 @@ package com.booking.stepdefinitions;
 	        );
 	    }
    
-	    
+	    @Given("a valid booking payload without deposit")
+	    public void a_valid_booking_payload_without_deposit() {
+
+	        String check_in = java.time.LocalDate.now().plusDays(20).toString();
+	        String check_out = java.time.LocalDate.now().plusDays(23).toString();
+
+	        int roomId = new java.util.Random().nextInt(100) + 1;
+
+	        booking_Payload = BookingPayloadUtil.createBookingPayload(
+	                false,
+	                "12345678901"
+	        );
+	    }
+
 	    
 	}
 	
