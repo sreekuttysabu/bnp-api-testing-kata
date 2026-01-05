@@ -11,6 +11,7 @@ package com.booking.stepdefinitions;
 import java.util.Random;
 
 import com.booking.utils.BookingPayloadUtil;
+import com.booking.utils.ConfigReader;
 
 	public class CreateBookingSteps {
 
@@ -82,12 +83,18 @@ import com.booking.utils.BookingPayloadUtil;
 	    @Given("I am authenticated")
 	    public void i_am_authenticated() {
 
+	    	String username = ConfigReader.get("booking.api.username");
+	        String password = ConfigReader.get("booking.api.password");
+
+	        assertNotNull("Username missing in config", username);
+	        assertNotNull("Password missing in config", password);
+
 	        String authPayload = """
 	            {
-	              "username": "admin",
-	              "password": "password"
+	              "username": "%s",
+	              "password": "%s"
 	            }
-	            """;
+	            """.formatted(username, password);
 
 	        Response authResponse = given()
 	                .contentType("application/json")
@@ -120,7 +127,7 @@ import com.booking.utils.BookingPayloadUtil;
 	        String updatePayload = BookingPayloadUtil.createBookingPayload(
 	                true,
 	                "12345678901"
-	        ).replace("\"firstname\": \"Hazel\"", "\"firstname\": \"UpdatedHazel\"");
+	        ).replace("\"firstname\": \"Hazel\"", "\"firstname\": \"UpdatedHazel1\"");
 
 	        response = given()
 	                .contentType("application/json")
