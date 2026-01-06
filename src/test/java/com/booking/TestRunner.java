@@ -5,6 +5,7 @@ import org.junit.platform.suite.api.*;
 import static io.cucumber.core.options.Constants.GLUE_PROPERTY_NAME;
 import static io.cucumber.core.options.Constants.PLUGIN_PROPERTY_NAME;
 import static io.cucumber.core.options.Constants.FILTER_TAGS_PROPERTY_NAME;
+import static io.cucumber.core.options.Constants.ANSI_COLORS_DISABLED_PROPERTY_NAME;
 
 @Suite
 @IncludeEngines("cucumber")
@@ -14,6 +15,10 @@ import static io.cucumber.core.options.Constants.FILTER_TAGS_PROPERTY_NAME;
 @ConfigurationParameter(
         key = PLUGIN_PROPERTY_NAME,
         value = "pretty, summary, html:target/cucumber-reports.html, json:target/cucumber.json"
+)
+@ConfigurationParameter(
+        key = ANSI_COLORS_DISABLED_PROPERTY_NAME,
+        value = "true"
 )
 public class TestRunner {
 }

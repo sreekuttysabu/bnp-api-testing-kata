@@ -10,6 +10,7 @@ package com.booking.stepdefinitions;
 
 import java.util.Random;
 
+import com.booking.utils.ApiEndpoints;
 import com.booking.utils.BookingPayloadUtil;
 import com.booking.utils.ConfigReader;
 
@@ -37,7 +38,7 @@ import com.booking.utils.ConfigReader;
 	                .accept("application/json")
 	                .body(booking_Payload)
 	                .when()
-	                .post("https://automationintesting.online/api/booking");
+	                .post(ApiEndpoints.BOOKING);
 	    	
 	    	response.then().log().ifValidationFails();
 	    }
@@ -99,7 +100,7 @@ import com.booking.utils.ConfigReader;
 	        Response authResponse = given()
 	                .contentType("application/json")
 	                .body(authPayload)
-	                .post("https://automationintesting.online/api/auth/login");
+	                .post(ApiEndpoints.AUTH);
 
 	        authToken = authResponse.jsonPath().getString("token");
 	        assertNotNull("Auth token should be generated", authToken);
@@ -115,7 +116,7 @@ import com.booking.utils.ConfigReader;
 	        response = given()
 	                .contentType("application/json")
 	                .body(booking_Payload)
-	                .post("https://automationintesting.online/api/booking");
+	                .post(ApiEndpoints.BOOKING);
 
 	        bookingId = response.jsonPath().getInt("bookingid");
 	        assertTrue(bookingId > 0);
