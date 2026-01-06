@@ -66,3 +66,44 @@ This kata has the purpose to evaluate both your technical skills as well as your
 * Use of Rest-Assured and Cucumber features
 * Commit history and progress demonstration
 #Initial setup verified in Eclipse.
+
+## Overview of Automation Project
+This project demonstrates a basic API Test Automation framework built using Java, Rest-Assured, and Cucumber (BDD).
+It validates key functionalities of a public hotel booking API, focusing on test design, maintainability, and real-world stability rather than exhaustive coverage.
+The solution is designed to reflect how API automation is approached in real projects, including handling of shared test environments.
+________________________________________
+## Tech Stack
+- 	Java
+- 	Rest-Assured – API testing library
+- 	Cucumber – BDD framework
+- 	JUnit Platform
+- 	Maven
+- 	Git / GitHub
+
+## Application Under Test
+- 	Base URL: https://automationintesting.online
+- 	Booking API: /api/booking
+- 	Authentication API: /api/auth
+*  This is a shared public environment, so dynamic test data is used to reduce conflicts.
+
+## Test Coverage
+Booking – Create
+* 	Create booking with valid data
+* 	Create booking without deposit
+* 	Validation error for invalid phone number
+* 	Validation error when last name is omitted
+* Booking – Update (Authenticated)
+* 	Update booking firstname successfully
+* Booking – Delete (Authenticated)
+* 	Delete an existing booking successfully
+
+## Design Approach
+	
+*  BDD-first design using readable feature files
+*  Reusable utility classes for:
+  - Payload creation
+  - API endpoints
+  - Configuration handling
+* 	Dynamic test data (room IDs and dates) to avoid collisions
+* 	No hard-coded credentials (read from configuration)
+* 	Clear separation of concerns for maintainability
