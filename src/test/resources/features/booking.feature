@@ -31,3 +31,9 @@ Feature: Booking API
   And I am authenticated
   When I update the booking firstname
   Then the response status code should be 200
+  
+  Scenario: Delete booking successfully
+  Given an existing booking
+  And I am authenticated
+  When I delete the booking
+  Then the response status code should be 200

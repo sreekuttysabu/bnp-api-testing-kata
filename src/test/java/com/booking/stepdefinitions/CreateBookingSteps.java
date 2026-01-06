@@ -147,7 +147,16 @@ import com.booking.utils.ConfigReader;
 	                "12345678901"
 	        ).replace("\"lastname\": \"Sreekutty\",", "");
 	    }
-	    
+	    @When("I delete the booking")
+	    public void i_delete_the_booking() {
+
+	        response = given()
+	                .contentType("application/json")
+	                .cookie("token", authToken)
+	                .delete(ApiEndpoints.BOOKING + "/" + bookingId);
+
+	        response.then().log().ifValidationFails();
+	    }  
 	}
 	
 	
